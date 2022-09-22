@@ -30,6 +30,8 @@ class UserController extends Controller
         $formFields['address'] = '';
         $formFields['country'] = '';
         $formFields['balance'] = 0;
+        $formFields['fundsAdded'] = 0;
+        $formFields['fundsWithdrawn'] = 0;
 
         $user = User::create($formFields);
 

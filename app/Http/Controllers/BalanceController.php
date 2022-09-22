@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Card;
-use App\Models\User;
-use App\Models\UserStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -25,13 +23,15 @@ class BalanceController extends Controller
         return view('balance.addCard');
     }
 
-    public function storeCard(Request $request)
+    public function store(Request $request)
     {
+
         $formFields = $request->validate([
-            'cardNumber' => ['required', 'min:12', 'max:12', Rule::unique('cards', 'cardNumber')],
-            'expireDate' => 'required',
-            'cardCvc' => 'required'
+            'cardNumber' => 'required|numeric|digits_between:12,12',
+            'expireDate' => 'required|between:5,5',
+            'cardCvc' => 'required|numeric|digits_between:3,3',
         ]);
+
 
         $formFields["cardBalance"] = 10000;
 
@@ -70,7 +70,8 @@ class BalanceController extends Controller
 
         $balance = implode('', $formFields);
         $user = Auth::user();
-        $cardBalance = $card::find($user->id);
+        $cardBalance = $card::where('user_id', '=', $user->id)->first();
+        //var_dump($card::where('user_id', '=', $user->id)->first()->cardBalance);die();
         if (($cardBalance->cardBalance - $balance) <= 0) {
             return redirect('/dashboard/payments/funds')->with('message', 'Insufficient funds');
         }
@@ -93,7 +94,7 @@ class BalanceController extends Controller
         $withdrawFunds = implode('', $formFields);
 
         $user = Auth::user();
-        $cardBalance = $card::find($user->id);
+        $cardBalance = $card::where('user_id', '=', $user->id)->first();
         if (($user->balance - $withdrawFunds) <= 0) {
             return redirect('/dashboard/payments/funds')->with('message', 'Insufficient funds');
         }

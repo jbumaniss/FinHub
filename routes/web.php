@@ -28,7 +28,7 @@ Route::post('/investment/manage/sellStock/{inputVolume}/{stockName}/{stockPrice}
 
 Route::get('/dashboard/payments', [BalanceController::class, 'payments'])->name('payments')->middleware('auth');
 Route::get('/dashboard/payments/add-card', [BalanceController::class, 'addCard'])->name('addCard')->middleware('auth');
-Route::post('/dashboard/payments/add-card', [BalanceController::class, 'storeCard'])->name('storeCard')->middleware('auth');
+Route::post('/dashboard/payments/store', [BalanceController::class, 'store'])->name('storeCard')->middleware('auth');
 Route::get('/dashboard/payments/funds', [BalanceController::class, 'funds'])->name('funds')->middleware('auth');
 Route::post('/dashboard/payments/addFunds', [BalanceController::class, 'addFunds'])->name('addFunds')->middleware('auth');
 Route::post('/dashboard/payments/withdrawFunds', [BalanceController::class, 'withdrawFunds'])->name('withdrawFunds')->middleware('auth');
